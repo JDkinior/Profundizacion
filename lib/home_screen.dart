@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:minitas/basketball_bet_screen.dart';
+import 'package:minitas/football_bet_screen.dart';
 import 'auth_service.dart';
-import 'casino_screen.dart'; // Asegúrate de tener este archivo
+import 'casino_screen.dart';
+import 'tennis_bet_screen.dart'; // Asegúrate de tener este archivo
 
 class HomeScreen extends StatelessWidget {
   final List<Game> games = [
@@ -9,21 +12,21 @@ class HomeScreen extends StatelessWidget {
       name: 'Fútbol',
       icon: Icons.sports_soccer,
       color: Colors.green,
-      screen: PlaceholderScreen(gameName: 'Fútbol'), // Pantalla temporal
+      screen: FootballBetScreen(), // Pantalla temporal
     ),
     Game(
       id: 2,
       name: 'Básquetbol',
       icon: Icons.sports_basketball,
       color: Colors.orange,
-      screen: PlaceholderScreen(gameName: 'Básquetbol'),
+      screen: BasketballBetScreen(),
     ),
     Game(
       id: 3,
       name: 'Tenis',
       icon: Icons.sports_tennis,
       color: Colors.blue,
-      screen: PlaceholderScreen(gameName: 'Tenis'),
+      screen: TennisBetScreen(),
     ),
     Game(
       id: 4,
@@ -40,6 +43,10 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Apuestas Deportivas'),
         actions: [
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () => Navigator.pushNamed(context, '/profile'),
+          ),
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
