@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TennisBetScreen extends StatefulWidget {
+  const TennisBetScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _TennisBetScreenState createState() => _TennisBetScreenState();
 }
 
@@ -27,18 +30,19 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
   String? selectedOutcome;
   String? selectedSetScore;
   double betAmount = 0.0;
+  // ignore: unused_field
   bool _showAdvanced = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Apuestas de Tenis')),
+      appBar: AppBar(title: const Text('Apuestas de Tenis')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             _buildMatchSelector(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (selectedMatch != null) _buildBettingPanel(),
             if (selectedMatch != null) _buildBetForm(),
           ],
@@ -49,7 +53,7 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
 
   Widget _buildMatchSelector() {
     return DropdownButtonFormField<Map<String, dynamic>>(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Seleccionar Partido',
         border: OutlineInputBorder(),
         suffixIcon: Icon(Icons.sports_tennis),
@@ -81,12 +85,12 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
           children: [
             Text(
               '${selectedMatch!['players'][0]} vs ${selectedMatch!['players'][1]}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text('${selectedMatch!['tournament']} - ${selectedMatch!['date']}',
-                style: TextStyle(color: Colors.grey)),
-            SizedBox(height: 20),
+                style: const TextStyle(color: Colors.grey)),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -94,9 +98,9 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
                 _buildOddButton('2', '${selectedMatch!['odds']['2']}'),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ExpansionTile(
-              title: Text('Apuestas de sets', style: TextStyle(fontSize: 16)),
+              title: const Text('Apuestas de sets', style: TextStyle(fontSize: 16)),
               initiallyExpanded: false,
               onExpansionChanged: (expanded) =>
                   setState(() => _showAdvanced = expanded),
@@ -145,10 +149,10 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
               outcome == '1'
                   ? selectedMatch!['players'][0]
                   : selectedMatch!['players'][1],
-              style: TextStyle(fontSize: 16)),
-          SizedBox(height: 5),
+              style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 5),
           Text(odd,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -163,7 +167,7 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
           children: [
             TextField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Cantidad a apostar',
                 prefixIcon: Icon(Icons.attach_money),
                 border: OutlineInputBorder(),
@@ -174,12 +178,12 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
                 });
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton.icon(
-              icon: Icon(Icons.sports_tennis),
-              label: Text('Confirmar Apuesta'),
+              icon: const Icon(Icons.sports_tennis),
+              label: const Text('Confirmar Apuesta'),
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
               onPressed: (betAmount > 0 &&
                       (selectedOutcome != null || selectedSetScore != null))
@@ -201,7 +205,7 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Confirmar Apuesta'),
+        title: const Text('Confirmar Apuesta'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,23 +218,23 @@ class _TennisBetScreenState extends State<TennisBetScreen> {
                 'Pronóstico: ${isSetBet ? selectedSetScore! : selectedOutcome == '1' ? selectedMatch!['players'][0] : selectedMatch!['players'][1]}'),
             Text('Cuota: ${odd}x'),
             Text('Cantidad: \$${betAmount.toStringAsFixed(2)}'),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
                 'Ganancia potencial: \$${(betAmount * odd).toStringAsFixed(2)}',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+                style: const TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
         actions: [
           TextButton(
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
-            child: Text('Apostar'),
+            child: const Text('Apostar'),
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Apuesta en tenis realizada!'),
                   backgroundColor: Colors.green,
                 ),
@@ -248,7 +252,7 @@ class CustomTennisChip extends StatelessWidget {
   final bool selected;
   final Function(bool) onSelected;
 
-  const CustomTennisChip({
+  const CustomTennisChip({super.key, 
     required this.label,
     required this.selected,
     required this.onSelected,

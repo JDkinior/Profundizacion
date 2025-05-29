@@ -1,109 +1,110 @@
 import 'package:flutter/material.dart';
-import 'package:minitas/basketball_bet_screen.dart';
+import 'package:minitas/auth_service.dart';
+import 'package:minitas/profile_screen.dart';
+import 'package:minitas/casino_screen.dart';
 import 'package:minitas/football_bet_screen.dart';
-import 'auth_service.dart';
-import 'casino_screen.dart';
-import 'tennis_bet_screen.dart'; // Asegúrate de tener este archivo
+import 'package:minitas/basketball_bet_screen.dart';
+import 'package:minitas/tennis_bet_screen.dart';
+
 
 class HomeScreen extends StatelessWidget {
-  final List<Game> games = [
-    Game(
-      id: 1,
-      name: 'Fútbol',
-      icon: Icons.sports_soccer,
-      color: Colors.green,
-      screen: FootballBetScreen(), // Pantalla temporal
-    ),
-    Game(
-      id: 2,
-      name: 'Básquetbol',
-      icon: Icons.sports_basketball,
-      color: Colors.orange,
-      screen: BasketballBetScreen(),
-    ),
-    Game(
-      id: 3,
-      name: 'Tenis',
-      icon: Icons.sports_tennis,
-      color: Colors.blue,
-      screen: TennisBetScreen(),
-    ),
-    Game(
-      id: 4,
-      name: 'Casino',
-      icon: Icons.casino,
-      color: Colors.purple,
-      screen: CasinoScreen(), // Pantalla del Buscaminas
-    ),
-  ];
+  final AuthService _authService = AuthService();
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = _authService.currentUser; // Obtener el usuario actual
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Apuestas Deportivas'),
+        title: const Text('Minitas Home'),
         actions: [
           IconButton(
-            icon: Icon(Icons.person),
-            onPressed: () => Navigator.pushNamed(context, '/profile'),
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
           ),
           IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              AuthService.logout();
-              Navigator.pushReplacementNamed(context, '/login');
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await _authService.signOut();
             },
-          )
+          ),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 1.2,
-          ),
-          itemCount: games.length,
-          itemBuilder: (context, index) {
-            return _buildGameCard(games[index], context);
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGameCard(Game game, BuildContext context) {
-    return Card(
-      elevation: 4,
-      color: game.color.withOpacity(0.2),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(15),
-        onTap: () => _navigateToGame(context, game),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(game.icon, size: 50, color: game.color),
-            SizedBox(height: 10),
-            Text(
-              game.name,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: game.color,
+          mainAxisAlignment: MainAxisAlignment.start, 
+          crossAxisAlignment: CrossAxisAlignment.stretch, 
+          children: <Widget>[
+            if (user != null) 
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Text(
+                  'Bienvenido, ${user.email ?? 'Usuario'}!',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
               ),
+            const SizedBox(height: 20),
+            const Text(
+              'Juegos y Apuestas',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 5),
-            Text(
-              'Apuestas disponibles',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+            const SizedBox(height: 20),
+            _buildGameButton(
+              context,
+              title: 'Casino (Buscaminas)',
+              icon: Icons.casino,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CasinoScreen()),
+                );
+              },
+            ),
+            const SizedBox(height: 15),
+            _buildGameButton(
+              context,
+              title: 'Apuestas de Fútbol',
+              icon: Icons.sports_soccer,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FootballBetScreen()),
+                );
+              },
+            ),
+            const SizedBox(height: 15),
+            _buildGameButton(
+              context,
+              title: 'Apuestas de Baloncesto',
+              icon: Icons.sports_basketball,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const BasketballBetScreen()),
+                );
+              },
+            ),
+            const SizedBox(height: 15),
+             _buildGameButton(
+              context,
+              title: 'Apuestas de Tenis',
+              icon: Icons.sports_tennis,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TennisBetScreen()),
+                );
+              },
             ),
           ],
         ),
@@ -111,58 +112,16 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToGame(BuildContext context, Game game) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => game.screen),
-    );
-  }
-}
-
-class Game {
-  final int id;
-  final String name;
-  final IconData icon;
-  final Color color;
-  final Widget screen;
-
-  Game({
-    required this.id,
-    required this.name,
-    required this.icon,
-    required this.color,
-    required this.screen,
-  });
-}
-
-// Pantalla temporal para los otros juegos
-class PlaceholderScreen extends StatelessWidget {
-  final String gameName;
-
-  const PlaceholderScreen({Key? key, required this.gameName}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(gameName),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.build, size: 100, color: Colors.grey),
-            SizedBox(height: 20),
-            Text(
-              'Próximamente...',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Sección en desarrollo',
-              style: TextStyle(fontSize: 18, color: Colors.grey),
-            ),
-          ],
+  Widget _buildGameButton(BuildContext context, {required String title, required IconData icon, required VoidCallback onPressed}) {
+    return ElevatedButton.icon(
+      icon: Icon(icon, size: 24),
+      label: Text(title),
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        textStyle: const TextStyle(fontSize: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );

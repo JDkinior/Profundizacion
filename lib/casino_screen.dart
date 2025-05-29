@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'games/minesweeper_game.dart';
 
 class CasinoScreen extends StatefulWidget {
+  const CasinoScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _CasinoScreenState createState() => _CasinoScreenState();
 }
 
@@ -28,10 +31,10 @@ class _CasinoScreenState extends State<CasinoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Casino - Buscaminas'),
+        title: const Text('Casino - Buscaminas'),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             onPressed: _startNewGame,
           ),
         ],
@@ -43,7 +46,7 @@ class _CasinoScreenState extends State<CasinoScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text('Puntos: ${game.points}', style: TextStyle(fontSize: 20)),
+                Text('Puntos: ${game.points}', style: const TextStyle(fontSize: 20)),
                 _buildGameStatus(),
               ],
             ),
@@ -87,7 +90,7 @@ class _CasinoScreenState extends State<CasinoScreen> {
         child: Center(
           child: cell.revealed
               ? isMine
-                  ? Icon(Icons.warning, color: Colors.black)
+                  ? const Icon(Icons.warning, color: Colors.black)
                   : Text(
                       cell.adjacentMines > 0 ? '${cell.adjacentMines}' : '',
                       style: TextStyle(
@@ -130,14 +133,14 @@ class _CasinoScreenState extends State<CasinoScreen> {
 
   Widget _buildGameStatus() {
     if (game.gameOver) {
-      return Text('¡Perdiste!',
+      return const Text('¡Perdiste!',
           style: TextStyle(color: Colors.red, fontSize: 20));
     }
     if (game.gameWon) {
-      return Text('¡Ganaste!',
+      return const Text('¡Ganaste!',
           style: TextStyle(color: Colors.green, fontSize: 20));
     }
-    return Text('Jugando...',
+    return const Text('Jugando...',
         style: TextStyle(color: Colors.blue, fontSize: 20));
   }
 }

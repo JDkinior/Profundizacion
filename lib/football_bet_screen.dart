@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class FootballBetScreen extends StatefulWidget {
+  const FootballBetScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _FootballBetScreenState createState() => _FootballBetScreenState();
 }
 
@@ -31,13 +34,13 @@ class _FootballBetScreenState extends State<FootballBetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Apuestas de Fútbol')),
+      appBar: AppBar(title: const Text('Apuestas de Fútbol')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             _buildMatchSelector(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (selectedMatch != null) _buildBettingPanel(),
             if (selectedMatch != null) _buildBetForm(),
           ],
@@ -48,7 +51,7 @@ class _FootballBetScreenState extends State<FootballBetScreen> {
 
   Widget _buildMatchSelector() {
     return DropdownButtonFormField<Map<String, dynamic>>(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Seleccionar Partido',
         border: OutlineInputBorder(),
       ),
@@ -78,11 +81,11 @@ class _FootballBetScreenState extends State<FootballBetScreen> {
           children: [
             Text(
               '${selectedMatch!['teams'][0]} vs ${selectedMatch!['teams'][1]}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
-            Text(selectedMatch!['date'], style: TextStyle(color: Colors.grey)),
-            SizedBox(height: 20),
+            const SizedBox(height: 10),
+            Text(selectedMatch!['date'], style: const TextStyle(color: Colors.grey)),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -112,9 +115,9 @@ class _FootballBetScreenState extends State<FootballBetScreen> {
       },
       child: Column(
         children: [
-          Text(outcome, style: TextStyle(fontSize: 24)),
-          SizedBox(height: 5),
-          Text(odd, style: TextStyle(fontSize: 16)),
+          Text(outcome, style: const TextStyle(fontSize: 24)),
+          const SizedBox(height: 5),
+          Text(odd, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
@@ -129,7 +132,7 @@ class _FootballBetScreenState extends State<FootballBetScreen> {
           children: [
             TextField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Cantidad a apostar',
                 prefixIcon: Icon(Icons.attach_money),
                 border: OutlineInputBorder(),
@@ -140,12 +143,12 @@ class _FootballBetScreenState extends State<FootballBetScreen> {
                 });
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton.icon(
-              icon: Icon(Icons.sports_soccer),
-              label: Text('Confirmar Apuesta'),
+              icon: const Icon(Icons.sports_soccer),
+              label: const Text('Confirmar Apuesta'),
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
               onPressed: betAmount > 0 && selectedOutcome != null
                   ? () => _showBetConfirmation()
@@ -161,7 +164,7 @@ class _FootballBetScreenState extends State<FootballBetScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Confirmar Apuesta'),
+        title: const Text('Confirmar Apuesta'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,23 +174,23 @@ class _FootballBetScreenState extends State<FootballBetScreen> {
             Text('Pronóstico: $selectedOutcome'),
             Text('Cuota: ${selectedMatch!['odds'][selectedOutcome]}'),
             Text('Cantidad: \$${betAmount.toStringAsFixed(2)}'),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
                 'Ganancia potencial: \$${(betAmount * selectedMatch!['odds'][selectedOutcome]).toStringAsFixed(2)}',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+                style: const TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
         actions: [
           TextButton(
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
-            child: Text('Apostar'),
+            child: const Text('Apostar'),
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Apuesta realizada con éxito!'),
                   backgroundColor: Colors.green,
                 ),
